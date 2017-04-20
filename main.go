@@ -84,13 +84,19 @@ func main() {
 	bot := initBot(conf.Bot.Token)
 
 	startBot(bot, conf.Bot.Users, func(update *tgbotapi.Update) error {
+		bot.Send(tgbotapi.NewChatAction(update.Message.Chat.ID, "typing"))
+
 		links, err := getTopRedditLinks()
 		if err != nil {
 			return err
 		}
 
 		notOnHN := make([]Result, 0)
-		for _, l := range links {
+		for idx, l := range links {
+			if idx%5 == 0 {
+				bot.Send(tgbotapi.NewChatAction(update.Message.Chat.ID, "typing"))
+			}
+
 			exists, err := checkIfStoryOnHN(l.URL)
 
 			if err != nil {

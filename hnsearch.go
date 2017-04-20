@@ -57,9 +57,11 @@ func checkIfStoryOnHN(storyURL string) (bool, error) {
 		return false, err
 	}
 
+	tenHoursAgo := now - 60*60*10
+
 	parsedStoryURL, _ := url.Parse(storyURL)
 	for _, s := range searchData.Hits {
-		if s.Points < 3 {
+		if s.Points < 3 && s.CreatedAt.Unix() < tenHoursAgo {
 			continue
 		}
 
