@@ -33,7 +33,7 @@ func getTopRedditLinks() ([]RedditLink, error) {
 		href, hrefExists := titleSel.Attr("href")
 		points, err := strconv.Atoi(s.Find(".score.unvoted").Text())
 
-		if hrefExists && err == nil {
+		if hrefExists && err == nil && points > 1 {
 			links = append(links, RedditLink{
 				title,
 				href,
